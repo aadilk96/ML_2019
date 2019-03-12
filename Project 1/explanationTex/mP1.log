@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.10.18)  11 MAR 2019 14:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.10.18)  12 MAR 2019 23:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -526,39 +526,139 @@ Underfull \hbox (badness 10000) in paragraph at lines 130--131
 File: ./k1.png Graphic file (type png)
 <use ./k1.png>
 Package pdftex.def Info: ./k1.png  used on input line 133.
-(pdftex.def)             Requested size: 205.61916pt x 215.00426pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 138.
+(pdftex.def)             Requested size: 241.90315pt x 252.94438pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 136--138
 
  []
 
+<./k1plt.png, id=6, 405.515pt x 266.9975pt>
+File: ./k1plt.png Graphic file (type png)
+<use ./k1plt.png>
+Package pdftex.def Info: ./k1plt.png  used on input line 139.
+(pdftex.def)             Requested size: 324.41243pt x 213.59827pt.
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./k1.png>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 138.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./k1.png> <./k1plt.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 143--144
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 143--144
+
+ []
+
+<./k2_1.png, id=20, 241.90375pt x 252.945pt>
+File: ./k2_1.png Graphic file (type png)
+<use ./k2_1.png>
+Package pdftex.def Info: ./k2_1.png  used on input line 145.
+(pdftex.def)             Requested size: 205.61916pt x 215.00426pt.
+<./k2_2.png, id=21, 241.90375pt x 252.945pt>
+File: ./k2_2.png Graphic file (type png)
+<use ./k2_2.png>
+Package pdftex.def Info: ./k2_2.png  used on input line 146.
+(pdftex.def)             Requested size: 205.61916pt x 215.00426pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 148--149
+
+ []
+
+<./k2plt.png, id=22, 390.45876pt x 274.02374pt>
+File: ./k2plt.png Graphic file (type png)
+<use ./k2plt.png>
+Package pdftex.def Info: ./k2plt.png  used on input line 150.
+(pdftex.def)             Requested size: 312.36742pt x 219.21928pt.
+[2 <./k2_1.png> <./k2_2.png> <./k2plt.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 154--155
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 154--155
+
+ []
+
+<./k3_1.png, id=30, 241.90375pt x 252.945pt>
+File: ./k3_1.png Graphic file (type png)
+<use ./k3_1.png>
+Package pdftex.def Info: ./k3_1.png  used on input line 156.
+(pdftex.def)             Requested size: 205.61916pt x 215.00426pt.
+<./k3_2.png, id=31, 241.90375pt x 252.945pt>
+File: ./k3_2.png Graphic file (type png)
+<use ./k3_2.png>
+Package pdftex.def Info: ./k3_2.png  used on input line 157.
+(pdftex.def)             Requested size: 205.61916pt x 215.00426pt.
+<./k3_3.png, id=32, 241.90375pt x 252.945pt>
+File: ./k3_3.png Graphic file (type png)
+<use ./k3_3.png>
+Package pdftex.def Info: ./k3_3.png  used on input line 158.
+(pdftex.def)             Requested size: 205.61916pt x 215.00426pt.
+<./k3plt.png, id=33, 403.5075pt x 266.9975pt>
+File: ./k3plt.png Graphic file (type png)
+<use ./k3plt.png>
+Package pdftex.def Info: ./k3plt.png  used on input line 162.
+(pdftex.def)             Requested size: 322.80644pt x 213.59827pt.
+[3 <./k3_1.png> <./k3_2.png> <./k3_3.png> <./k3plt.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 166--167
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 166--167
+
+ []
+
+<./k4_11.png, id=42, 241.90375pt x 252.945pt>
+File: ./k4_11.png Graphic file (type png)
+<use ./k4_11.png>
+Package pdftex.def Info: ./k4_11.png  used on input line 168.
+(pdftex.def)             Requested size: 205.61916pt x 215.00426pt.
+<./k4_3.png, id=43, 241.90375pt x 252.945pt>
+File: ./k4_3.png Graphic file (type png)
+<use ./k4_3.png>
+Package pdftex.def Info: ./k4_3.png  used on input line 169.
+(pdftex.def)             Requested size: 205.61916pt x 215.00426pt.
+<./k4_1.png, id=44, 241.90375pt x 252.945pt>
+File: ./k4_1.png Graphic file (type png)
+<use ./k4_1.png>
+Package pdftex.def Info: ./k4_1.png  used on input line 170.
+(pdftex.def)             Requested size: 205.61916pt x 215.00426pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
+
+ []
+
+<./k4plt.png, id=45, 393.47pt x 266.9975pt>
+File: ./k4plt.png Graphic file (type png)
+<use ./k4plt.png>
+Package pdftex.def Info: ./k4plt.png  used on input line 174.
+(pdftex.def)             Requested size: 314.77641pt x 213.59827pt.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 176.
+[4 <./k4_11.png> <./k4_3.png> <./k4_1.png> <./k4plt.png>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 176.
  (./mP1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 138.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 138.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 176.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 176.
 Package rerunfilecheck Info: File `mP1.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 138.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 176.
  ) 
 Here is how much of TeX's memory you used:
- 8384 strings out of 492982
- 119790 string characters out of 6134895
- 216707 words of memory out of 5000000
- 11829 multiletter control sequences out of 15000+600000
+ 8447 strings out of 492982
+ 120637 string characters out of 6134895
+ 217707 words of memory out of 5000000
+ 11877 multiletter control sequences out of 15000+600000
  9304 words of font info for 25 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 28i,5n,32p,219b,331s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 28i,5n,32p,347b,353s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on mP1.pdf (1 page, 36812 bytes).
+Output written on mP1.pdf (4 pages, 87079 bytes).
 PDF statistics:
- 29 PDF objects out of 1000 (max. 8388607)
- 21 compressed objects within 1 object stream
- 6 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 67 PDF objects out of 1000 (max. 8388607)
+ 32 compressed objects within 1 object stream
+ 9 named destinations out of 1000 (max. 500000)
+ 66 words of extra memory for PDF output out of 10000 (max. 10000000)
 

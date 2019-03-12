@@ -130,9 +130,47 @@ Aadil Anil Kumar}\hfill
 {\textbf{\large K = 1}} \\ \\
 
 \begin{center}
-\includegraphics[scale=.85]{./k1.png}  \\
+\includegraphics[scale=1.0]{./k1.png}  \\
 \end{center}
 
-For the case where K = 1, there is only one cluster that is created. Hence, running many iterations does not make a difference in the convergence of the centroids. \\
+For the case where K = 1, there is only one cluster that is created. Hence, running many iterations does not make a difference in the convergence of the centroids as it just the mean value of the set. \\ 
+We can see this by taking the mean of the zeros vector and then computing the Euclidean Distance from the mean to the centroid of the cluster. (See Juptyer Notebook)\\
+\begin{center}
+ \includegraphics[scale=.80]{./k1plt.png} \\
+\end{center} 
+
+\newpage
+\textbf{\large K = 2} \\ \\
+\begin{center}
+\includegraphics[scale=.85]{./k2_1.png}  \\
+\includegraphics[scale=.85]{./k2_2.png}  \\
+\end{center}
+For the case of K = 2, there are two clusters that are created. At this point the amount of iterations that are performed matters, as with each iteration the centroids get closer to convergence. However, it converges very quick and the distance from the mean of the vector and centroids stays the same for the rest of the iterations.  \\
+\begin{center}
+ \includegraphics[scale=.80]{./k2plt.png} \\
+\end{center} 
+
+\newpage
+\textbf{\large K = 3} \\ \\
+\begin{center}
+\includegraphics[scale=.85]{./k3_1.png}  \\
+\includegraphics[scale=.85]{./k3_2.png}  
+\includegraphics[scale=.85]{./k3_3.png}  \\
+\end{center}
+For the case of K = 3, there are three clusters that are created. Again as with K = 2, the number of iterations definetly increases the rate of convergence. 
+\begin{center}
+ \includegraphics[scale=.80]{./k3plt.png} \\
+\end{center} 
 }
+\newpage
+\textbf{\large K = 200} \\ \\
+\begin{center}
+\includegraphics[scale=.85]{./k4_11.png}  \\
+\includegraphics[scale=.85]{./k4_3.png}  
+\includegraphics[scale=.85]{./k4_1.png}  \\
+\end{center}
+For the case of K = 200, there are 200 clusters created. In this case all 200 data points form their own cluster. Iterations do not make a difference as the Euclidean distance stays the same. \\
+\begin{center}
+ \includegraphics[scale=.80]{./k4plt.png} \\
+\end{center} 
 \end{document}
