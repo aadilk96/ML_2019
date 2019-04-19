@@ -130,33 +130,34 @@ def linear_regression(data, k):
     Xtest = add_bais(Xtest)
     
     # build the class
-    Y = np.zeros((1000, 10))
-    Ytest = np.zeros((1000, 10))
+    Y = np.zeros((k + 1, 10))
+    Ytest = np.zeros((k + 1, 10))
     
-    for i in range(1000):
+    for i in range(k + 1):
         digit = i // 100
         Y[i] = onehot_encode(digit).T #assign the one-hot encoding
         Ytest[i] = onehot_encode(digit).T #same here
         
     # calculate the optimal weight
-    Wopt = np.matmul(np.matmul(la.inv(np.matmul(np.dot((1/1000), X), X.T)), X), Y).T
+    Wopt = (np.dot(la.inv((1/1000) * np.matmul(X, X.T)) * (1/1000), np.matmul(X, Y))).T
     
     #calculate the training error term
     # first make the prediction
-    Ypred = np.matmul(Wopt,X).T
+    Ypred = np.matmul(Wopt, X).T
     Ytestpred = np.matmul(Wopt, Xtest).T
     
     #calculate the error
     mse_train = square_norm(Ypred - Y) / 1000.0
     num_miss_train = 0
-    for i in range(1000):
+
+    for i in range(k+1):
         if np.argmax(Ypred[i]) != np.argmax(Y[i]):
             num_miss_train = num_miss_train + 1
     miss_train = num_miss_train / 1000.0
     
     mse_test = square_norm(Ytestpred - Ytest) / 1000.0
     num_miss_test = 0
-    for i in range(1000):
+    for i in range(k+1):
         if np.argmax(Ytestpred[i]) != np.argmax(Ytest[i]):
             num_miss_test = num_miss_test + 1
     miss_test = num_miss_test / 1000.0
@@ -176,3 +177,26 @@ print('mse_train = {}, miss_train = {}, mse_test = {}, miss_test = {}'.format(ms
 
 
 
+# ks = []
+# mse_trains = []
+# miss_trains = []
+# mse_tests = []
+# miss_tests = []
+# for k in range(1, 241):
+#     _, mse_train, miss_train, mse_test, miss_test = linear_regression(vectors, k)
+#     ks.append(k)
+#     mse_trains.append(mse_train)
+#     miss_trains.append(miss_train)
+#     mse_tests.append(mse_test)
+#     miss_tests.append(miss_test)
+    
+# plt.xlabel('k')
+# plt.ylabel('error')
+# plt.title('Bias-Variance, Linear Scaling')
+# plt.grid(True)
+# p1, = plt.plot(ks, mse_trains, label = 'mse_train')
+# p2, = plt.plot(ks, mse_tests, label = 'mse_test')
+# p3, = plt.plot(ks, miss_trains, label = 'miss_train')
+# p4, = plt.plot(ks, miss_tests, label = 'miss_test')
+# plt.legend(handles=[p1, p2, p3, p4])
+# plt.show()
