@@ -186,6 +186,19 @@ $$ MISS_{train} = \frac{\sum_{i = 1}^{1000} \min(1, \|\arg\max(Y_i) - \arg\max(Y
 $$ MISS_{test} = \frac{\sum_{i = 1}^{1000} \min(1, \|\arg\max({Y_{test}}_i) - \arg\max(Y_{test}pred_i)\|)}{1000} $$ \\ 
 \end{enumerate}
 
-We use plain linear regression with $\alpha$ set to zero. 
+We use plain linear regression with $\alpha$ set to zero. \\ \\
+\newpage
+\textbf{{\Large 3 Analysis}} \\ 
+
+First, we variate the value of k (features) and check to see how this in turn affects our error terms. \\
+
+\textbf{Linear Plot} \\ \\
+\includegraphics[scale=.95]{./1.png} \\ 
+As you can see from figure 1, the MSE's for train and test do not vary much. While misclassification rate of train is a lot lower than that of test. \\
+
+Now we use a log-log scaling of the data for the plot. \\ \\
+\textbf{Log-Log Plot} \\ \\
+\includegraphics[scale=.95]{2.png}
+
 
 \end{document}
