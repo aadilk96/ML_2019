@@ -152,11 +152,11 @@ The input patterns for the digits data set have a dimensionality of $\mathbb{R}^
 We first create a function to add a bias term to all the features. Linear Regression creates a model based on a offine function, which contains a bias term. Without the bias term we can only approximate the data using a linear function, leading to a ineffective model. \\
 
 \begin{lstlisting}
-function add_bias (dataset):
-    N, D = dimension_of_dataset
-    Y = matrix_of_ones(N, D + 1)
-    Y[:,:-1] = dataset
-    return Y
+function Add Bias (dataset):
+    R, C = dimension_of_dataset
+    Biased = matrix_of_ones(R, C + 1)
+    Biased[:,:-1] = dataset
+    return Biased
 \end{lstlisting}
 
 
@@ -165,10 +165,10 @@ function add_bias (dataset):
 Due the digits dataset not containing any kind of label, we generate class vectors for each label $\{0,1,...,9\}$ as $v \in \mathbb{R}^{10}$. \\
 
 \begin{lstlisting}
-function one-hot-encode (digit):
-    rst = array_of_zeros(10)
-    rst[digit] = 1
-    return rst 
+function One Hot Encode (digit):
+    Encoded = array_of_zeros(10)
+    Encoded[digit] = 1
+    return Encoded 
 \end{lstlisting}
 \qquad \\
 
@@ -176,19 +176,19 @@ function one-hot-encode (digit):
 
 For a given the given dataset and a fixed number of k features, our linear regression algorithm proceeds as follows: 
 \begin{enumerate}
-\item  Performing a PCA algorithm to reduce the dimensions of $data$ from $\mathbb{R}^{240}$ to $\mathbb{R}^{k}$. Thus, we can view PCA algorithms as a function $PCA: \mathbb{R}^{240} \to \mathbb{R}^{k}$
-\item Split the entire dataset after dimension reduction into training set features $X \in \mathbb{R}^{1000 \times k}$ and test set features $X_{test} \in \mathbb{R}^{1000 \times k}$
-\item Associate $X$ and $X_{test}$ with bias term, thus we have $X, X_{test} \in \mathbb{R}^{1000 \times (K + 1)}$
-\item Build the correct class vector for training set as $Y \in \mathbb{R}^{(k + 1) \times 10}$ and test set as $Y_{test} \in \mathbb{R}^{(k + 1) \times 10}$. After such operation, we obtained the complete training set as $(X, Y)$ and the test set as $(X_{test}, Y_{test})$
-\item Using the training set, compute the optimal weight matrix as 
+\item  Executes the PCA algorithm to reduce the dimensionality of $vectors$ from $\mathbb{R}^{240}$ to $\mathbb{R}^{k}$. Thus, we can view PCA algorithms as a function $PCA: \mathbb{R}^{240} \to \mathbb{R}^{k}$
+\item Splits the entire dataset into a training set with features $X \in \mathbb{R}^{1000 \times k}$ and a test set with features $X_{test} \in \mathbb{R}^{1000 \times k}$
+\item  Adds bias terms to $X$ and $X_{test}$, giving us $X, X_{test} \in \mathbb{R}^{1000 \times (K + 1)}$ 
+\item Creates the class vectors for the training set as $Y \in \mathbb{R}^{(k + 1) \times 10}$ and the test set as $Y_{test} \in \mathbb{R}^{(k + 1) \times 10}$. We then obtain the training set as $(X, Y)$ and the test set as $(X_{test}, Y_{test})$
+\item Using the training set, it computes the optimal weight matrix as 
 $$ {W_{opt}}^\top = (\frac{1}{N} \cdot X \cdot X^\top + \alpha^2 \cdot I_{nxn})^{-1} \cdot \frac{1}{N} \cdot X \cdot Y $$
-we can rewrite this as 
+which we can rewrite this as 
 $$ W_{opt} = ((\frac{1}{N} \cdot X \cdot X^\top + \alpha^2 \cdot I_{nxn})^{-1} \cdot \frac{1}{N} \cdot X \cdot Y)^\top $$
-\item Calculate the error term. \\
-First, make a prediction: 
+\item Calculates the error term by,  \\
+First, making a prediction: 
 $$ Y_{pred} = (W_{opt} \cdot X)^\top $$
 $$ Y_{test}pred = (W_{opt} \cdot X_{test})^\top $$
-Using the prediction, we calculate the corresponding error:
+Using the prediction, to calculate the corresponding error:
 $$ MSE_{train} = \frac{\|Y - Ypred\|^2}{1000} $$
 $$ MSE_{test} = \frac{\|Ytest - Y_{test}pred\|^2}{1000} $$
 $$ MISS_{train} = \frac{\sum_{i = 1}^{1000} \min(1, \|\arg\max(Y_i) - \arg\max(Ypred_i)\|)}{1000} $$
@@ -201,17 +201,14 @@ $$ MISS_{test} = \frac{\sum_{i = 1}^{1000} \min(1, \|\arg\max({Y_{test}}_i) - \a
 
 Running Linear Regression with k = 1 results in: \\
 
-$MSE Train = 0.0016303054383612536 \\ Miss Train = 0.0 \\ MSE Test = 0.0016888622951603202 \\ Miss Test = 0.0$ \\
+$MSE Train = 0.817235911653994 \\ Miss Train = 0.8 \\ MSE Test = 0.8178985006192132 \\ Miss Test = 0.8$ \\
 
 Running Linear Regression with k = 240 results in: \\
 
-$MSE Train = 0.23832487277908213 \\ Miss Train = 0.036 \\ MSE Test = 0.24009979766389591 \\ Miss Test = 0.161$
+$MSE Train = 0.2126900661247448 \\ Miss Train = 0.019 \\ MSE Test = 0.3738118732873061 \\ Miss Test = 0.083$
 \\
 
 \end{multicols}
-
-Shown above is a comparison of the different values that are obtained for the lower bound of features (1) vs. the upper bound (240). As the figures show, the MSE's and Misclassification rates vary highly between both. The lower the amount of features the lower the error and misclassification. \\
-
 \begin{figure}[h!]
   \centering
   \begin{subfigure}[b]{0.87\linewidth}
@@ -226,10 +223,21 @@ Shown above is a comparison of the different values that are obtained for the lo
   \label{fig:plots}
 \end{figure}
 
+\newpage
+
+Running Linear Regression with k = 36 results in one of the lowest Misclassification rates for the test set: \\
+
+$MSE Train = 0.3097027454874764 \\ Miss Train = 0.051 \\ MSE Test = 0.3257865614949295 \\ Miss Test = 0.052$
+\\
+
+Shown above is a comparison of the different values that are obtained for the lower bound of features (1) vs. the upper bound (240). As the figures show, the MSE's and Misclassification rates vary highly between both. The lower the amount of features the higher the error and misclassification. \\
+
+
+
 Figure 1a shows the result of varying the value of k (features) and checking to see how this in turn affects our error terms and misclassification rates. \\
 
 
-As you can see from figure 1, the MSE's for train and test increase linearly with k. While the misclassification rate of train is a significantly lower than that of test with increasing k. \\ \\
+As the figures show, for small values of k the error and misclassification rates are high, it then drops as k increases and the model reaches a optimal amount of features. \\ After which for increasing k the error and misclassification rates of the test sets increase slightly. This could be due to overfitting effects. \\ \\
 \\
 
 \textbf{{\Large References}} \\
