@@ -19,6 +19,7 @@
 \usepackage{comment}
 \usepackage{verbatim}
 \usepackage{color}
+\usepackage{subcaption}
 
 
 %% pdflatex?
@@ -150,6 +151,14 @@ The input patterns for the digits data set have a dimensionality of $\mathbb{R}^
 
 We first create a function to add a bias term to all the features. Linear Regression creates a model based on a offine function, which contains a bias term. Without the bias term we can only approximate the data using a linear function, leading to a ineffective model. \\
 
+\begin{lstlisting}
+function add_bias (dataset):
+    N, D = dimension_of_dataset
+    Y = matrix_of_ones(N, D + 1)
+    Y[:,:-1] = dataset
+    return Y
+\end{lstlisting}
+
 
 \textbf{2.1.1 One-hot Encoding} \\
 
@@ -157,7 +166,7 @@ Due the digits dataset not containing any kind of label, we generate class vecto
 
 \begin{lstlisting}
 function one-hot-encode (digit):
-    rst = [0] * 10
+    rst = array_of_zeros(10)
     rst[digit] = 1
     return rst 
 \end{lstlisting}
@@ -185,20 +194,54 @@ $$ MSE_{test} = \frac{\|Ytest - Y_{test}pred\|^2}{1000} $$
 $$ MISS_{train} = \frac{\sum_{i = 1}^{1000} \min(1, \|\arg\max(Y_i) - \arg\max(Ypred_i)\|)}{1000} $$
 $$ MISS_{test} = \frac{\sum_{i = 1}^{1000} \min(1, \|\arg\max({Y_{test}}_i) - \arg\max(Y_{test}pred_i)\|)}{1000} $$ \\ 
 \end{enumerate}
-
-We use plain linear regression with $\alpha$ set to zero. \\ \\
 \newpage
 \textbf{{\Large 3 Analysis}} \\ 
 
-First, we variate the value of k (features) and check to see how this in turn affects our error terms. \\
+\begin{multicols}{2}
 
-\textbf{Linear Plot} \\ \\
-\includegraphics[scale=.95]{./1.png} \\ 
-As you can see from figure 1, the MSE's for train and test do not vary much. While misclassification rate of train is a lot lower than that of test. \\
+Running Linear Regression with k = 1 results in: \\
 
-Now we use a log-log scaling of the data for the plot. \\ \\
-\textbf{Log-Log Plot} \\ \\
-\includegraphics[scale=.95]{2.png}
+$MSE Train = 0.0016303054383612536 \\ Miss Train = 0.0 \\ MSE Test = 0.0016888622951603202 \\ Miss Test = 0.0$ \\
+
+Running Linear Regression with k = 240 results in: \\
+
+$MSE Train = 0.23832487277908213 \\ Miss Train = 0.036 \\ MSE Test = 0.24009979766389591 \\ Miss Test = 0.161$
+\\
+
+\end{multicols}
+
+Shown above is a comparison of the different values that are obtained for the lower bound of features (1) vs. the upper bound (240). As the figures show, the MSE's and Misclassification rates vary highly between both. The lower the amount of features the lower the error and misclassification. \\
+
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.87\linewidth}
+    \includegraphics[width=\linewidth]{./1.png}
+    \caption{Linear Plot}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.87\linewidth}
+    \includegraphics[width=\linewidth]{./2.png}
+    \caption{Log-Log Plot}
+  \end{subfigure}
+  \caption{Linear and Log Plots for Increasing K }
+  \label{fig:plots}
+\end{figure}
+
+Figure 1a shows the result of varying the value of k (features) and checking to see how this in turn affects our error terms and misclassification rates. \\
+
+
+As you can see from figure 1, the MSE's for train and test increase linearly with k. While the misclassification rate of train is a significantly lower than that of test with increasing k. \\ \\
+\\
+
+\textbf{{\Large References}} \\
+
+Using Categorical Data with One Hot Encoding. (n.d.). Retrieved from \\ https://www.kaggle.com/dansbecker/using-categorical-data-with-one-hot-encoding \\
+
+Muller, A. C., \& Guido, S. (2017). Introduction to machine learning with Python: A guide for data scientists. Beijing: OReilly. \\
+
+Principal Component Analysis Tutorial. (n.d.). Retrieved from https://www.dezyre.com/data-science-in-python-tutorial/principal-component-analysis-tutorial \\
+
+Agarwal, A. (2018, October 05). Linear Regression using Python. Retrieved from \\ https://towardsdatascience.com/linear-regression-using-python-b136c91bf0a2 \\
+
 
 
 \end{document}
