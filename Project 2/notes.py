@@ -7,7 +7,7 @@
 
 # ## Used libraries
 
-# In[3]:
+# In[1]:
 
 
 import numpy as np
@@ -18,10 +18,26 @@ from sklearn.decomposition import PCA
 
 # ## Loading data
 
-# In[4]:
+# In[2]:
 
 
 vectors = np.loadtxt('data/mfeat-pix.txt')
+ones = vectors[200:400]
+
+
+# ## Visualization functions
+
+# In[3]:
+
+
+def showImage(vectors):
+    imageMatrix = vectors.reshape(16, 15)
+    plt.imshow(imageMatrix, cmap = 'gray')
+    plt.show()
+    
+def multImage(vectors): 
+    for rows in vectors: 
+        showImage(rows)
 
 
 # ## Feature extraction 
@@ -34,122 +50,176 @@ vectors = np.loadtxt('data/mfeat-pix.txt')
 # - Principal Component Analysis (PCA) is a feature that reduces the dimensionality of a data set consisting of many variables correlated with each other, while retaining the variation present in the dataset, up to the maximum extent.
 
 # In this assignment we will use PCA for feature extraction.
-# ### The steps in PCA algorithm follows:
+# ### Steps for principal component analysis (PCA):
 
-# - centering the data: mapping each vector $x_i \to \bar{x_i}$, where $\bar{x_i} = x_i - \bar{x}$
-# - calculating the $\mu_1, \mu_2, ... \mu_m$, where $m$ is the number of principle components
-#    $\mu_i$ is calculated via $SVD$ algorithm.
-#    
-#    1. We calculate the correlation matrix $R$.
-#    2. Calculate the SVD via $$[U, \Sigma, V^*] = SVD(R)$$, where
-#    $$ R = U \Sigma V^* $$
-#    3. Extract the principle components $\mu_1, \mu_2, ... \mu_m$, where $ m < n$, by taking the first $m$ columns of $U$. 
-# - Compression: we take each $\mu_1, \mu_2, \mu_3 ... $ and dot product the already centered $\bar{x_i}$ to obtain a vector $v \in \mathbb{R}^m$
-#  \begin{align*}
-#  v = \begin{bmatrix}
-#  \mu_1 \cdot \bar{x_i} \\
-#   \mu_2 \cdot \bar{x_i} \\
-#    \mu_3 \cdot \bar{x_i} \\
-#     \mu_4 \cdot \bar{x_i} \\
-#     ... \\
-#     \mu_m \cdot \bar{x_i}
-#  \end{bmatrix}
-#  \end{align*}
-# - Decompression: we simply calculate
-#  $$ recovered = \sum_{i = 1}^{m} v_i \cdot \mu_i $$
-# Additionally, we split the training data into training set $X$ and test set $Xtest$, and build its associated label one-hot encoding vector matrix $Y$ and $Ytest$ 
+# 1. Prepare the data (standardization):
+#     - Center the data: subtract the mean from each variable. This produces a data set whose mean is zero.
+#     - Scale the data: If the variances of the variables in your data are significantly different, it's a good idea to scale the data to unit variance. This is achieved by dividing each variables by its standard deviation.
+# 2. Calculate the covariance/correlation matrix
+# 3. Compute SVD of the covariance/correlation matrix
+# 4. Compute the new dataset
+#     - We need to compress and decompress the data using the principle component
+#     - And then in order to compute the new dataset we need to recover from the standardization
 
-# ## Adding bias
-# 
-# We then create a fuction to add the bias term to the features. Linear regression will create a model based on offine function, which contains a bias term. Without it, we can only approximate the data using linear function, and it would lead to a very bad model.
+# In[4]:
+
+
+def standardization(data):
+    # standardization of the data set
+    mean = np.sum(data, axis = 0)
+    N, _ = data.shape
+    mean = mean / float(N)
+    mean_mat = [mean] * N
+    standardized = data - mean_mat
+    return standardized, mean
+
+def destandardization(standardized, mean):
+    # recover from the standardization
+    N, _ = standardized.shape
+    mean_mat = [mean] * N
+    data = standardized + mean_mat
+    return data
+
 
 # In[5]:
 
 
-def add_bias(X):
-    N, D = X.shape
-    Y = np.ones((N, D + 1))
-    Y[:,:-1] = X
-    return Y
+def compress(standardized, pc, k):
+    # compress the standardized data using the princle component, pc
+    pc = pc[:, :k]
+    return np.matmul(standardized, pc)
 
-def square_norm(x):
-    return np.sum(np.power(x, 2))
+def decompress(compressed, pc, k):
+    # recover from compression
+    pc = pc[:, :k]
+    return np.matmul(compressed, pc.T)
+
+
+# In[6]:
+
+
+def pca(data, k):
+    # first standardize the data
+    standardized_data, mean_data = standardization(data)
+
+    # calculate the covariance/correlation matrix
+    R = np.corrcoef(standardized_data.T)
+
+    # compute the SVD
+    u, s, _ = la.svd(R)
+    return decompress(compress(standardized_data, u, k), u, k), mean_data
+
+
+# An example of PCA with k = 4 on the digit 1 from the dataset would look like this:
+
+# In[7]:
+
+
+pca_data, mean_data = pca(ones, 4)
+multImage(destandardization(pca_data, mean_data)[:2])
+
+
+# An example of PCA with k = 199 on the same dataset
+
+# In[8]:
+
+
+pca_data, mean_data = pca(ones, 199)
+multImage(destandardization(pca_data, mean_data)[:2])
+
+
+# ## Adding bias
+# 
+# A function to add a bias term to all the features. Linear Regression creates a model based on a offine function, which contains a bias term. Without the bias term we can only approximate the data using a linear function, leading to a ineffective model.
+
+# In[9]:
+
+
+def addBias(dataset):
+    R, C = dataset.shape
+    biased = np.ones((R, C + 1))
+    biased[:,:-1] = dataset
+    return biased
+
+def squareNorm(val):
+    return np.sum(np.power(val, 2))
 
 
 # ## Use One-hot encoding to generate class vector
 # Since the dataset doesn't contain any kind of label, we need to generate a class vector for each label $\{0, 1, 2, ... 10\}$ as $v \in \mathbb{R}^{10}$. The following function will execute such a strategy.
 
-# In[6]:
+# In[10]:
 
 
-def onehot_encode(digit):
-    rst = np.zeros(10)
-    rst[digit] = 1
-    return rst
+def oneHotEncode(digit):
+    encoded = np.zeros(10)
+    encoded[digit] = 1
+    return encoded
 
 
 # # Linear Regression Implementation
-# For a given dataset $data$ and a fixed number of feature $k$,
-# our algorithm of linear regression proceed as the following:
-# 1. Performing a PCA algorithm to reduce the dimensions of $data$ from $\mathbb{R}^{240}$ to $\mathbb{R}^{k}$. Thus, we can view PCA algorithms as a function $PCA: \mathbb{R}^{240} \to \mathbb{R}^{k}$
-# 2. Split the entire dataset after dimension reduction into training set features $X \in \mathbb{R}^{1000 \times k}$ and test set features $X_{test} \in \mathbb{R}^{1000 \times k}$
-# 3. Associate $X$ and $X_{test}$ with bias term, thus we have $X, X_{test} \in \mathbb{R}^{1000 \times (K + 1)}$ 
-# 4. Build the correct class vector for training set as $Y \in \mathbb{R}^{(k + 1) \times 10}$ and test set as $Y_{test} \in \mathbb{R}^{(k + 1) \times 10}$. After such operation, we obtained the complete training set as $(X, Y)$ and the test set as $(X_{test}, Y_{test})$
-# 5. Using the training set, compute the optimal weight matrix as
+# For a given dataset $vectors$ and a fixed number of feature $k$, our linear regression algorithm executes with the following steps:
+# 1. Executes the PCA algorithm to reduce the dimensionality of $vectors$ from $\mathbb{R}^{240}$ to $\mathbb{R}^{k}$. Thus, we can view PCA algorithms as a function $PCA: \mathbb{R}^{240} \to \mathbb{R}^{k}$
+# 2. Splits the entire dataset into a training set with features $X \in \mathbb{R}^{1000 \times k}$ and a test set with features $X_{test} \in \mathbb{R}^{1000 \times k}$
+# 3. Adds bias terms to $X$ and $X_{test}$, giving us $X, X_{test} \in \mathbb{R}^{1000 \times (K + 1)}$ 
+# 4. Creates the class vectors for the training set as $Y \in \mathbb{R}^{(k + 1) \times 10}$ and the test set as $Y_{test} \in \mathbb{R}^{(k + 1) \times 10}$. We then obtain the training set as $(X, Y)$ and the test set as $(X_{test}, Y_{test})$
+# 5. Using the training set, it computes the optimal weight matrix as
 # $$ {W_{opt}}^\top = (\frac{1}{N} \cdot X^\top \cdot X + \alpha^2 \cdot I_{nxn})^{-1} \cdot \frac{1}{N} \cdot X^\top \cdot Y $$
-# we can rewrite as
+# which we can rewrite as
 # $$ W_{opt} = ((\frac{1}{N} \cdot X^\top \cdot X + \alpha^2 \cdot I_{nxn})^{-1} \cdot \frac{1}{N} \cdot X^\top \cdot Y)^\top $$
-# 6. Calculate the error term.
-# First, we make the prediction:
+# 6. Calculates the error term by,
+# First, making a prediction:
 # $$ Y_{pred} = (W_{opt} \cdot X^\top)^\top $$
 # $$ Y_{test}pred = (W_{opt} \cdot {X_{test}}^\top)^\top $$
-# Using the prediction, we calculate the corresponding error
+# Using the prediction, to calculate the corresponding error
 # $$ MSE_{train} = \frac{\|Y - Ypred\|^2}{1000} $$
 # $$ MSE_{test} = \frac{\|Ytest - Y_{test}pred\|^2}{1000} $$
 # $$ MISS_{train} = \frac{\sum_{i = 1}^{1000} \min(1, \|\arg\max(Y_i) - \arg\max(Ypred_i)\|)}{1000} $$
 # $$ MISS_{test} = \frac{\sum_{i = 1}^{1000} \min(1, \|\arg\max({Y_{test}}_i) - \arg\max(Y_{test}pred_i)\|)}{1000} $$
 
-# In[126]:
+# In[11]:
 
 
-def linear_regression(data, k):
-    # Performing PCA
+def linearRegression(data, k):
+    
+    # Executing PCA
     pca = PCA(n_components=k)
     data_pca = pca.fit_transform(data)
     
     # Splitting the training set
     X = np.ones((1000, k))
     Xtest = np.ones((1000, k))
+    
     for i in range(10):
-        X[i*100:i*100 + 100][:] = data_pca[i*200:i*200 + 100][:]
-        Xtest[i*100:i*100 + 100][:] = data_pca[i*200 + 100:i*200 + 200][:]
+        X[i * 100 : i * 100 + 100][:] = data_pca[i * 200 : i * 200 + 100][:]
+        Xtest[i * 100 : i * 100 + 100][:] = data_pca[i * 200 + 100 : i * 200 + 200][:]
     
-    # Adding the bias term
-    X = add_bias(X)
-    Xtest = add_bias(Xtest)
+    # Adding bias terms
+    X = addBias(X)
+    Xtest = addBias(Xtest)
     
-    # Building the class
+    # Creating the class
     Y = np.zeros((1000, 10))
     Ytest = np.zeros((1000, 10))
     
     for i in range(1000):
         digit = i // 100
-        Y[i] = onehot_encode(digit).T # Assigning the one-hot encoding
-        Ytest[i] = onehot_encode(digit).T # Also here
-
-    left = la.inv((1/1000) * np.matmul(X.T, X) + (0 * np.eye(k+1))) * (1/1000)
+        # One-hot encoding
+        Y[i] = oneHotEncode(digit).T 
+        Ytest[i] = oneHotEncode(digit).T 
+        
+    # Calc optimal weight
+    left = la.inv((1/1000) * np.matmul(X.T, X) + (0 * np.eye(k + 1))) * (1/1000)
     right = np.matmul(X.T, Y)
-
-    # Calculating the optimal weight
     Wopt = (np.dot(left,right)).T
     
-    # Calculating the training error term
-    # We first need to make a prediction
+    # Calc training error term
+    # Making a prediction initially
     Ypred = np.matmul(Wopt, X.T).T
     Ytestpred = np.matmul(Wopt, Xtest.T).T
     
-    # Then we need to calculate the error
-    mse_train = square_norm(Ypred - Y) / 1000.0
+    # Calc error
+    mse_train = squareNorm(Ypred - Y) / 1000.0
     num_miss_train = 0
 
     for i in range(1000):
@@ -157,7 +227,7 @@ def linear_regression(data, k):
             num_miss_train = num_miss_train + 1
     miss_train = num_miss_train / 1000.0
     
-    mse_test = square_norm(Ytestpred - Ytest) / 1000.0
+    mse_test = squareNorm(Ytestpred - Ytest) / 1000.0
     num_miss_test = 0
     
     for i in range(1000):
@@ -169,18 +239,18 @@ def linear_regression(data, k):
     return Wopt, mse_train, miss_train, mse_test, miss_test
 
 
-# In[127]:
+# In[12]:
 
 
-_, mse_train, miss_train, mse_test, miss_test = linear_regression(vectors, 40)
-print('mse_train = {}, miss_train = {}, mse_test = {}, miss_test = {}'.format(mse_train, miss_train, mse_test, miss_test))
+_, mse_train, miss_train, mse_test, miss_test = linearRegression(vectors, 40)
+print("MSE Train =", mse_train, ", Miss Train =", miss_train, ", MSE Test =", mse_test, ", Miss Test =",miss_test)
 
 
 # # Plotting the k and the errors
 # We variate k and check to see how the error changes
 # 1. First, plot the data using linear scaling
 
-# In[128]:
+# In[13]:
 
 
 # Plotting the k and the errors
@@ -190,7 +260,7 @@ miss_trains = []
 mse_tests = []
 miss_tests = []
 for k in range(1, 241):
-    _, mse_train, miss_train, mse_test, miss_test = linear_regression(vectors, k)
+    _, mse_train, miss_train, mse_test, miss_test = linearRegression(vectors, k)
     ks.append(k)
     mse_trains.append(mse_train)
     miss_trains.append(miss_train)
@@ -211,7 +281,7 @@ plt.show()
 
 # 2. Then, use log-log scaling of the data
 
-# In[129]:
+# In[14]:
 
 
 # Log plot
@@ -227,16 +297,23 @@ plt.legend(handles=[p1, p2, p3, p4])
 plt.show()
 
 
-# In[32]:
+# In[15]:
 
 
-_, mse_train, miss_train, mse_test, miss_test = linear_regression(vectors, 1)
-print("mse_train =", mse_train, ", miss_train =", miss_train, ", mse_test =", mse_test, ", miss_test =",miss_test)
+_, mse_train, miss_train, mse_test, miss_test = linearRegression(vectors, 1)
+print("MSE Train =", mse_train, ", Miss Train =", miss_train, ", MSE Test =", mse_test, ", Miss Test =",miss_test)
 
 
-# In[33]:
+# In[16]:
 
 
-_, mse_train, miss_train, mse_test, miss_test = linear_regression(vectors, 240)
-print("mse_train =", mse_train, ", miss_train =", miss_train, ", mse_test =", mse_test, ", miss_test =",miss_test)
+_, mse_train, miss_train, mse_test, miss_test = linearRegression(vectors, 240)
+print("MSE Train =", mse_train, ", Miss Train =", miss_train, ", MSE Test =", mse_test, ", Miss Test =",miss_test)
+
+
+# In[17]:
+
+
+_, mse_train, miss_train, mse_test, miss_test = linearRegression(vectors, 36)
+print("MSE Train =", mse_train, ", Miss Train =", miss_train, ", MSE Test =", mse_test, ", Miss Test =",miss_test)
 
